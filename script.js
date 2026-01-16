@@ -50,13 +50,15 @@ function addSubject() {
 }
 
 function displaySubjects() {
-    let tableBody = document.getElementById("subjectList");
+    const tableBody = document.getElementById("subjectList");
     tableBody.innerHTML = "";
 
     subjects.forEach((sub, index) => {
-        let gradeLetter = getGradeLetter(sub.marks);
-        let gradeClass = sub.marks >= 70 ? "grade-A" :
-                         sub.marks >= 50 ? "grade-B" : "grade-C";
+        const gradeLetter = getGradeLetter(sub.marks);
+
+        let gradeClass =
+            sub.marks >= 70 ? "grade-high" :
+            sub.marks >= 50 ? "grade-mid" : "grade-low";
 
         tableBody.innerHTML += `
             <tr class="${gradeClass}">
@@ -72,7 +74,6 @@ function displaySubjects() {
         `;
     });
 }
-
 
 function deleteSubject(index) {
     subjects.splice(index, 1);

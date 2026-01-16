@@ -53,8 +53,8 @@ li {
 }
 
 .subject-table {
-    border-collapse: collapse;
     width: 100%;
+    border-collapse: collapse;
     margin-top: 15px;
 }
 
@@ -70,6 +70,6 @@ li {
     color: white;
 }
 
-.grade-A { background-color: #c8e6c9; }
-.grade-B { background-color: #fff9c4; }
-.grade-C { background-color: #ffcdd2; }
+.grade-high { background-color: #c8e6c9; }
+.grade-mid  { background-color: #fff9c4; }
+.grade-low  { background-color: #ffcdd2; }
