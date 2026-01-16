@@ -1,59 +1,86 @@
 let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
+function getGradePoint(marks) {
+    if (marks >= 80) return 4.00;
+    else if (marks >= 75) return 3.67;
+    else if (marks >= 70) return 3.33;
+    else if (marks >= 65) return 3.00;
+    else if (marks >= 60) return 2.67;
+    else if (marks >= 55) return 2.33;
+    else if (marks >= 50) return 2.00;
+    else if (marks >= 45) return 1.67;
+    else if (marks >= 40) return 1.00;
+    else return 0.00;
+}
+
 function addSubject() {
     let name = document.getElementById("subject").value;
+    let credit = Number(document.getElementById("credit").value);
     let marks = Number(document.getElementById("marks").value);
-    let weight = Number(document.getElementById("weight").value);
 
-    // Input validation
-    if (name === "" || marks < 0 || marks > 100 || weight <= 0) {
-        alert("Please enter valid input!");
+    if (name === "" || credit <= 0 || marks < 0 || marks > 100) {
+        alert("Please enter valid subject details!");
         return;
     }
 
-    subjects.push({ name, marks, weight });
+    let gradePoint = getGradePoint(marks);
+
+    subjects.push({ name, credit, marks, gradePoint });
     localStorage.setItem("subjects", JSON.stringify(subjects));
 
     displaySubjects();
+
+    document.getElementById("subject").value = "";
+    document.getElementById("credit").value = "";
+    document.getElementById("marks").value = "";
 }
 
 function displaySubjects() {
     let list = document.getElementById("subjectList");
     list.innerHTML = "";
 
-    for (let i = 0; i < subjects.length; i++) {
-        list.innerHTML += `<li>${subjects[i].name}: ${subjects[i].marks} (${subjects[i].weight}%)</li>`;
-    }
+    subjects.forEach((sub, index) => {
+        list.innerHTML += `
+        <li>
+            ${sub.name} | Credit: ${sub.credit} | Marks: ${sub.marks} | GP: ${sub.gradePoint}
+            <button onclick="deleteSubject(${index})">Delete</button>
+        </li>`;
+    });
 }
 
-function calculateGrade() {
-    let total = 0;
-    let totalWeight = 0;
+function deleteSubject(index) {
+    subjects.splice(index, 1);
+    localStorage.setItem("subjects", JSON.stringify(subjects));
+    displaySubjects();
+}
 
-    for (let i = 0; i < subjects.length; i++) {
-        total += subjects[i].marks * subjects[i].weight;
-        totalWeight += subjects[i].weight;
-    }
+function calculateCGPA() {
+    let totalPoints = 0;
+    let totalCredits = 0;
 
-    if (totalWeight !== 100) {
-        alert("Total weight must be 100%");
+    subjects.forEach(sub => {
+        totalPoints += sub.gradePoint * sub.credit;
+        totalCredits += sub.credit;
+    });
+
+    if (totalCredits === 0) {
+        alert("No subjects added!");
         return;
     }
 
-    let average = total / 100;
-    let grade = getGrade(average);
+    let cgpa = totalPoints / totalCredits;
 
     document.getElementById("result").innerText =
-        `Final Score: ${average.toFixed(2)}% | Grade: ${grade}`;
+        `Your CGPA is: ${cgpa.toFixed(2)}`;
 }
 
-// Function for grade determination
-function getGrade(score) {
-    if (score >= 80) return "A";
-    else if (score >= 70) return "B";
-    else if (score >= 60) return "C";
-    else if (score >= 50) return "D";
-    else return "F";
+function clearAll() {
+    if (confirm("Are you sure you want to clear all subjects?")) {
+        subjects = [];
+        localStorage.removeItem("subjects");
+        displaySubjects();
+        document.getElementById("result").innerText = "";
+    }
 }
 
 displaySubjects();

@@ -2,29 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Grade Calculator</title>
+    <title>Student CGPA Calculator</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Student Grade Calculator</h1>
+    <h1>Student CGPA Calculator</h1>
 
     <div class="container">
         <label>Subject Name:</label>
         <input type="text" id="subject">
 
+        <label>Credit Hours:</label>
+        <input type="number" id="credit">
+
         <label>Marks (0–100):</label>
         <input type="number" id="marks">
-
-        <label>Weight (%):</label>
-        <input type="number" id="weight">
 
         <button onclick="addSubject()">Add Subject</button>
 
         <h2>Subjects</h2>
         <ul id="subjectList"></ul>
 
-        <button class="calculate" onclick="calculateGrade()">Calculate Final Grade</button>
+        <button class="calculate" onclick="calculateCGPA()">Calculate CGPA</button>
+        <button class="clear" onclick="clearAll()">Clear All</button>
 
         <h2 id="result"></h2>
     </div>

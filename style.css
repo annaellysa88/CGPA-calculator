@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
+    background-color: #f2f4f7;
     padding: 30px;
 }
 
@@ -11,7 +11,7 @@ h1 {
 .container {
     background: white;
     padding: 20px;
-    max-width: 400px;
+    max-width: 450px;
     margin: auto;
     border-radius: 8px;
 }
@@ -39,6 +39,15 @@ button {
     color: white;
 }
 
+.clear {
+    background-color: #f44336;
+    color: white;
+}
+
 ul {
     padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
 }
