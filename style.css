@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    padding: 30px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+    border-radius: 8px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 6px;
+    margin-top: 5px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.calculate {
+    background-color: #4CAF50;
+    color: white;
+}
+
+ul {
+    padding-left: 20px;
+}
