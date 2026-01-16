@@ -3,95 +3,187 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student CGPA Calculator</title>
+<title>CGPA Calculator with Statistics</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
-  h2 { color: #333; }
-  input, button { margin: 5px; padding: 5px 10px; font-size: 14px; }
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  input, button { margin: 5px; padding: 5px; }
   button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 4px; }
   button:hover { background-color: #45a049; }
-  #grades-container { margin-bottom: 20px; }
-  .stats-table { border-collapse: collapse; width: 50%; margin-top: 20px; }
+  #stats { margin-top: 20px; }
+  .stats-table { border-collapse: collapse; width: 60%; }
   .stats-table th, .stats-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
   .stats-table th { background-color: #4CAF50; color: white; }
-  .high { background-color: #c8e6c9; }   /* Green for high grades */
-  .medium { background-color: #fff9c4; } /* Yellow for average grades */
-  .low { background-color: #ffcdd2; }    /* Red for low grades */
+  .high { background-color: #c8e6c9; }
+  .medium { background-color: #fff9c4; }
+  .low { background-color: #ffcdd2; }
 </style>
 </head>
 <body>
 
-<h2>Student CGPA Calculator</h2>
+<h2>CGPA Calculator</h2>
 
-<div id="grades-container">
-  <div class="grade-entry">
-    Grade: <input type="number" class="grade" min="0" max="100" placeholder="0-100">
-    Credits: <input type="number" class="credits" min="0" placeholder="Credits">
-  </div>
+<div>
+    Subject Name: <input type="text" id="subject" placeholder="e.g. Math">
+    Credit: <input type="number" id="credit" min="1" placeholder="Credits">
+    Marks: <input type="number" id="marks" min="0" max="100" placeholder="0-100">
+    <button onclick="addSubject()">Add Subject</button>
 </div>
 
-<button onclick="addGradeEntry()">Add Another Subject</button>
-<button onclick="calculateCGPA()">Calculate CGPA & Statistics</button>
+<ul id="subjectList"></ul>
 
-<h3>Statistics</h3>
-<table class="stats-table" id="stats-output">
-  <tr>
-    <th>Total Credits</th>
-    <th>Highest Grade</th>
-    <th>Lowest Grade</th>
-    <th>Average Grade</th>
-    <th>CGPA</th>
-  </tr>
-</table>
+<button onclick="calculateCGPA()">Calculate CGPA & Statistics</button>
+<button onclick="clearAll()">Clear All</button>
+
+<h3>Result</h3>
+<p id="result"></p>
+
+<div id="stats"></div>
 
 <script>
-function addGradeEntry() {
-  const container = document.getElementById('grades-container');
-  const div = document.createElement('div');
-  div.classList.add('grade-entry');
-  div.innerHTML = `
-    Grade: <input type="number" class="grade" min="0" max="100" placeholder="0-100">
-    Credits: <input type="number" class="credits" min="0" placeholder="Credits">
-  `;
-  container.appendChild(div);
+let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
+
+function getGradePoint(marks) {
+    if (marks >= 80) return 4.00;
+    else if (marks >= 75) return 3.70;
+    else if (marks >= 70) return 3.30;
+    else if (marks >= 65) return 3.00;
+    else if (marks >= 60) return 2.70;
+    else if (marks >= 55) return 2.30;
+    else if (marks >= 50) return 2.00;
+    else if (marks >= 47) return 1.70;
+    else if (marks >= 44) return 1.30;
+    else if (marks >= 40) return 1.00;
+    else return 0.00;
+}
+
+function addSubject() {
+    let name = document.getElementById("subject").value.trim();
+    let credit = Number(document.getElementById("credit").value);
+    let marks = Number(document.getElementById("marks").value);
+
+    if (name === "" || credit <= 0 || marks < 0 || marks > 100) {
+        alert("Please enter valid subject details!");
+        return;
+    }
+
+    let gradePoint = getGradePoint(marks);
+
+    subjects.push({ name, credit, marks, gradePoint });
+    localStorage.setItem("subjects", JSON.stringify(subjects));
+
+    displaySubjects();
+
+    document.getElementById("subject").value = "";
+    document.getElementById("credit").value = "";
+    document.getElementById("marks").value = "";
+}
+
+function displaySubjects() {
+    let list = document.getElementById("subjectList");
+    list.innerHTML = "";
+
+    subjects.forEach((sub, index) => {
+        list.innerHTML += `
+        <li>
+            ${sub.name} | Credit: ${sub.credit} | Marks: ${sub.marks} | GP: ${sub.gradePoint}
+            <button onclick="deleteSubject(${index})">Delete</button>
+        </li>`;
+    });
+}
+
+function deleteSubject(index) {
+    subjects.splice(index, 1);
+    localStorage.setItem("subjects", JSON.stringify(subjects));
+    displaySubjects();
+    calculateCGPA(); // update statistics
+}
+
+function gradeClass(mark) {
+    if (mark >= 80) return 'high';
+    else if (mark >= 50) return 'medium';
+    else return 'low';
 }
 
 function calculateCGPA() {
-  const grades = Array.from(document.querySelectorAll('.grade')).map(input => parseFloat(input.value));
-  const credits = Array.from(document.querySelectorAll('.credits')).map(input => parseFloat(input.value));
+    if (subjects.length === 0) {
+        alert("No subjects added!");
+        return;
+    }
 
-  if (grades.includes(NaN) || credits.includes(NaN)) {
-    alert("Please enter all grades and credits!");
-    return;
-  }
+    let totalPoints = 0, totalCredits = 0;
+    let marksArray = subjects.map(sub => sub.marks);
 
-  let totalPoints = 0, totalCredits = 0;
-  for (let i = 0; i < grades.length; i++) {
-    totalPoints += grades[i] * credits[i];
-    totalCredits += credits[i];
-  }
+    subjects.forEach(sub => {
+        totalPoints += sub.gradePoint * sub.credit;
+        totalCredits += sub.credit;
+    });
 
-  const cgpa = totalCredits ? (totalPoints / totalCredits).toFixed(2) : 0;
-  const highest = Math.max(...grades);
-  const lowest = Math.min(...grades);
-  const average = grades.length ? (grades.reduce((a,b) => a+b, 0)/grades.length).toFixed(2) : 0;
+    let cgpa = totalPoints / totalCredits;
+    let highest = Math.max(...marksArray);
+    let lowest = Math.min(...marksArray);
+    let average = (marksArray.reduce((a, b) => a + b, 0) / marksArray.length).toFixed(2);
 
-  // Determine color coding for highest, lowest, and average grades
-  function gradeClass(grade) {
-    if (grade >= 80) return 'high';
-    else if (grade >= 50) return 'medium';
-    else return 'low';
-  }
+    document.getElementById("result").innerText = `Your CGPA is: ${cgpa.toFixed(2)}`;
 
-  document.getElementById('stats-output').innerHTML = `
-    <tr>
-      <td>${totalCredits}</td>
-      <td class="${gradeClass(highest)}">${highest}</td>
-      <td class="${gradeClass(lowest)}">${lowest}</td>
-      <td class="${gradeClass(average)}">${average}</td>
-      <td>${cgpa}</td>
-    </tr>
-  `;
+    document.getElementById("stats").innerHTML = `
+        <table class="stats-table">
+            <tr>
+                <th>Total Credits</th>
+                <th>Highest Marks</th>
+                <th>Lowest Marks</th>
+                <th>Average Marks</th>
+            </tr>
+            <tr>
+                <td>${totalCredits}</td>
+                <td class="${gradeClass(highest)}">${highest}</td>
+                <td class="${gradeClass(lowest)}">${lowest}</td>
+                <td class="${gradeClass(average)}">${average}</td>
+            </tr>
+        </table>
+    `;
+
+    // Save statistics in local storage
+    localStorage.setItem("lastStats", JSON.stringify({
+        totalCredits,
+        highest,
+        lowest,
+        average,
+        cgpa: cgpa.toFixed(2)
+    }));
+}
+
+function clearAll() {
+    if (confirm("Are you sure you want to clear all subjects?")) {
+        subjects = [];
+        localStorage.removeItem("subjects");
+        localStorage.removeItem("lastStats");
+        displaySubjects();
+        document.getElementById("result").innerText = "";
+        document.getElementById("stats").innerHTML = "";
+    }
+}
+
+// Display subjects and previous statistics on page load
+displaySubjects();
+if (localStorage.getItem("lastStats")) {
+    const stats = JSON.parse(localStorage.getItem("lastStats"));
+    document.getElementById("result").innerText = `Your CGPA is: ${stats.cgpa}`;
+    document.getElementById("stats").innerHTML = `
+        <table class="stats-table">
+            <tr>
+                <th>Total Credits</th>
+                <th>Highest Marks</th>
+                <th>Lowest Marks</th>
+                <th>Average Marks</th>
+            </tr>
+            <tr>
+                <td>${stats.totalCredits}</td>
+                <td class="${gradeClass(stats.highest)}">${stats.highest}</td>
+                <td class="${gradeClass(stats.lowest)}">${stats.lowest}</td>
+                <td class="${gradeClass(stats.average)}">${stats.average}</td>
+            </tr>
+        </table>
+    `;
 }
 </script>
 
