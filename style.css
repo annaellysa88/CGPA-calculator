@@ -51,3 +51,25 @@ ul {
 li {
     margin-bottom: 8px;
 }
+
+.subject-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.subject-table th,
+.subject-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.subject-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.grade-A { background-color: #c8e6c9; }
+.grade-B { background-color: #fff9c4; }
+.grade-C { background-color: #ffcdd2; }

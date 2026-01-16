@@ -13,6 +13,20 @@ function getGradePoint(marks) {
     else return 0.00;
 }
 
+function getGradeLetter(marks) {
+    if (marks >= 80) return "A";
+    else if (marks >= 75) return "A-";
+    else if (marks >= 70) return "B+";
+    else if (marks >= 65) return "B";
+    else if (marks >= 60) return "B-";
+    else if (marks >= 55) return "C+";
+    else if (marks >= 50) return "C";
+    else if (marks >= 45) return "D+";
+    else if (marks >= 40) return "D";
+    else return "F";
+}
+
+
 function addSubject() {
     let name = document.getElementById("subject").value;
     let credit = Number(document.getElementById("credit").value);
@@ -36,17 +50,29 @@ function addSubject() {
 }
 
 function displaySubjects() {
-    let list = document.getElementById("subjectList");
-    list.innerHTML = "";
+    let tableBody = document.getElementById("subjectList");
+    tableBody.innerHTML = "";
 
     subjects.forEach((sub, index) => {
-        list.innerHTML += `
-        <li>
-            ${sub.name} | Credit: ${sub.credit} | Marks: ${sub.marks} | GP: ${sub.gradePoint}
-            <button onclick="deleteSubject(${index})">Delete</button>
-        </li>`;
+        let gradeLetter = getGradeLetter(sub.marks);
+        let gradeClass = sub.marks >= 70 ? "grade-A" :
+                         sub.marks >= 50 ? "grade-B" : "grade-C";
+
+        tableBody.innerHTML += `
+            <tr class="${gradeClass}">
+                <td>${sub.name}</td>
+                <td>${sub.credit}</td>
+                <td>${sub.marks}</td>
+                <td>${gradeLetter}</td>
+                <td>${sub.gradePoint.toFixed(2)}</td>
+                <td>
+                    <button onclick="deleteSubject(${index})">Delete</button>
+                </td>
+            </tr>
+        `;
     });
 }
+
 
 function deleteSubject(index) {
     subjects.splice(index, 1);
