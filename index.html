@@ -1,35 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Student CGPA Calculator</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student CGPA Calculator</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+  h2 { color: #333; }
+  input, button { margin: 5px; padding: 5px 10px; font-size: 14px; }
+  button { cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 4px; }
+  button:hover { background-color: #45a049; }
+  #grades-container { margin-bottom: 20px; }
+  .stats-table { border-collapse: collapse; width: 50%; margin-top: 20px; }
+  .stats-table th, .stats-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+  .stats-table th { background-color: #4CAF50; color: white; }
+  .high { background-color: #c8e6c9; }   /* Green for high grades */
+  .medium { background-color: #fff9c4; } /* Yellow for average grades */
+  .low { background-color: #ffcdd2; }    /* Red for low grades */
+</style>
 </head>
 <body>
 
-    <h1>Student CGPA Calculator</h1>
+<h2>Student CGPA Calculator</h2>
 
-    <div class="container">
-        <label>Subject Name:</label>
-        <input type="text" id="subject">
+<div id="grades-container">
+  <div class="grade-entry">
+    Grade: <input type="number" class="grade" min="0" max="100" placeholder="0-100">
+    Credits: <input type="number" class="credits" min="0" placeholder="Credits">
+  </div>
+</div>
 
-        <label>Credit Hours:</label>
-        <input type="number" id="credit">
+<button onclick="addGradeEntry()">Add Another Subject</button>
+<button onclick="calculateCGPA()">Calculate CGPA & Statistics</button>
 
-        <label>Marks (0–100):</label>
-        <input type="number" id="marks">
+<h3>Statistics</h3>
+<table class="stats-table" id="stats-output">
+  <tr>
+    <th>Total Credits</th>
+    <th>Highest Grade</th>
+    <th>Lowest Grade</th>
+    <th>Average Grade</th>
+    <th>CGPA</th>
+  </tr>
+</table>
 
-        <button onclick="addSubject()">Add Subject</button>
+<script>
+function addGradeEntry() {
+  const container = document.getElementById('grades-container');
+  const div = document.createElement('div');
+  div.classList.add('grade-entry');
+  div.innerHTML = `
+    Grade: <input type="number" class="grade" min="0" max="100" placeholder="0-100">
+    Credits: <input type="number" class="credits" min="0" placeholder="Credits">
+  `;
+  container.appendChild(div);
+}
 
-        <h2>Subjects</h2>
-        <ul id="subjectList"></ul>
+function calculateCGPA() {
+  const grades = Array.from(document.querySelectorAll('.grade')).map(input => parseFloat(input.value));
+  const credits = Array.from(document.querySelectorAll('.credits')).map(input => parseFloat(input.value));
 
-        <button class="calculate" onclick="calculateCGPA()">Calculate CGPA</button>
-        <button class="clear" onclick="clearAll()">Clear All</button>
+  if (grades.includes(NaN) || credits.includes(NaN)) {
+    alert("Please enter all grades and credits!");
+    return;
+  }
 
-        <h2 id="result"></h2>
-    </div>
+  let totalPoints = 0, totalCredits = 0;
+  for (let i = 0; i < grades.length; i++) {
+    totalPoints += grades[i] * credits[i];
+    totalCredits += credits[i];
+  }
 
-    <script src="script.js"></script>
+  const cgpa = totalCredits ? (totalPoints / totalCredits).toFixed(2) : 0;
+  const highest = Math.max(...grades);
+  const lowest = Math.min(...grades);
+  const average = grades.length ? (grades.reduce((a,b) => a+b, 0)/grades.length).toFixed(2) : 0;
+
+  // Determine color coding for highest, lowest, and average grades
+  function gradeClass(grade) {
+    if (grade >= 80) return 'high';
+    else if (grade >= 50) return 'medium';
+    else return 'low';
+  }
+
+  document.getElementById('stats-output').innerHTML = `
+    <tr>
+      <td>${totalCredits}</td>
+      <td class="${gradeClass(highest)}">${highest}</td>
+      <td class="${gradeClass(lowest)}">${lowest}</td>
+      <td class="${gradeClass(average)}">${average}</td>
+      <td>${cgpa}</td>
+    </tr>
+  `;
+}
+</script>
+
 </body>
 </html>
