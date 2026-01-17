@@ -1,6 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f4f7;
+    font-family: Arial;
+    background: #f2f4f7;
     padding: 30px;
 }
 
@@ -11,9 +11,9 @@ h2 {
 .container {
     background: white;
     padding: 15px;
-    max-width: 450px;
+    max-width: 400px;
     margin: 10px auto;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 label {
@@ -24,25 +24,17 @@ label {
 input {
     width: 100%;
     padding: 6px;
-    margin-top: 5px;
 }
 
 button {
-    margin-top: 15px;
-    padding: 10px;
     width: 100%;
+    padding: 10px;
+    margin-top: 10px;
     cursor: pointer;
 }
 
-.calculate {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.clear {
-    background-color: #f44336;
-    color: white;
-}
+.calculate { background: #4CAF50; color: white; }
+.clear { background: #f44336; color: white; }
 
 .subject-table {
     width: 100%;
@@ -52,39 +44,35 @@ button {
 
 .subject-table th,
 .subject-table td {
-    border: 1px solid #000000b2;
+    border: 1px solid #333;
     padding: 8px;
     text-align: center;
 }
 
 .subject-table th {
-    background-color: #4CAF50;
+    background: #4CAF50;
     color: white;
 }
 
-.grade-high { background-color: #c8e6c9; }
-.grade-mid  { background-color: #fff9c4; }
-.grade-low  { background-color: #ffcdd2; }
-
 .stats-table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 20px;
+    border-collapse: collapse;
 }
 
 .stats-table th,
 .stats-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     padding: 8px;
     text-align: center;
 }
 
 .stats-table th {
-    background-color: #2196F3;
+    background: #2196F3;
     color: white;
 }
 
 canvas {
     display: block;
-    margin: 20px auto;
+    margin: 30px auto;
 }

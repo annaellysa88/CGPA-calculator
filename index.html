@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CGPA Calculator</title>
-
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,27 +10,24 @@
 
 <h2>CGPA Calculator</h2>
 
-<!-- LAST SEMESTER CGPA -->
 <div class="container">
     <label>Last Semester CGPA</label>
-    <input type="number" id="lastCGPA" step="0.01" min="0" max="4" placeholder="e.g. 3.45">
+    <input type="number" id="lastCGPA" step="0.01" min="0" max="4">
 </div>
 
-<!-- SUBJECT INPUT -->
 <div class="container">
-    <label>Subject Name</label>
+    <label>Subject</label>
     <input type="text" id="subject">
 
     <label>Credits</label>
-    <input type="number" id="credit" min="1">
+    <input type="number" id="credit">
 
     <label>Marks</label>
-    <input type="number" id="marks" min="0" max="100">
+    <input type="number" id="marks">
 
     <button onclick="addSubject()">Add Subject</button>
 </div>
 
-<!-- SUBJECT TABLE -->
 <table class="subject-table">
     <thead>
         <tr>
@@ -40,24 +35,21 @@
             <th>Credits</th>
             <th>Marks</th>
             <th>Grade</th>
-            <th>Grade Point</th>
+            <th>GP</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody id="subjectList"></tbody>
 </table>
 
-<button class="calculate" onclick="finishCalculation()">
-    Finish & Calculate CGPA
-</button>
-<button class="clear" onclick="clearAll()">Clear All</button>
+<button class="calculate" onclick="finishCalculation()">Finish & Calculate</button>
+<button class="clear" onclick="clearAll()">Clear</button>
 
-<h3>Result</h3>
-<p id="result"></p>
+<h3 id="result"></h3>
 
 <div id="stats"></div>
 
-<canvas id="cgpaChart" width="400" height="200"></canvas>
+<canvas id="cgpaChart" width="400" height="250"></canvas>
 
 <script src="script.js"></script>
 </body>
