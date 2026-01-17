@@ -11,7 +11,7 @@ h1 {
 .container {
     background: white;
     padding: 20px;
-    max-width: 450px;
+    max-width: 900px;
     margin: auto;
     border-radius: 8px;
 }
@@ -44,14 +44,7 @@ button {
     color: white;
 }
 
-ul {
-    padding-left: 20px;
-}
-
-li {
-    margin-bottom: 8px;
-}
-
+/* SUBJECT TABLE */
 .subject-table {
     width: 100%;
     border-collapse: collapse;
@@ -60,7 +53,7 @@ li {
 
 .subject-table th,
 .subject-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #000000b2;
     padding: 8px;
     text-align: center;
 }
@@ -70,6 +63,21 @@ li {
     color: white;
 }
 
+.subject-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.subject-table tr:hover {
+    background-color: #e8f5e9;
+}
+
+.subject-table button {
+    width: auto;
+    padding: 5px 10px;
+    margin-top: 0;
+}
+
+/* GRADE COLORS */
 .grade-high { background-color: #c8e6c9; }
 .grade-mid  { background-color: #fff9c4; }
 .grade-low  { background-color: #ffcdd2; }
