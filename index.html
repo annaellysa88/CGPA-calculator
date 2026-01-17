@@ -6,7 +6,10 @@
 <title>CGPA Calculator with Statistics</title>
 
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; }
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
 
 input, button {
     margin: 5px;
@@ -21,7 +24,9 @@ button {
     border-radius: 4px;
 }
 
-button:hover { background-color: #45a049; }
+button:hover {
+    background-color: #45a049;
+}
 
 /* SUBJECT TABLE */
 .subject-table {
@@ -32,7 +37,7 @@ button:hover { background-color: #45a049; }
 
 .subject-table th,
 .subject-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #000000b2;
     padding: 8px;
     text-align: center;
 }
@@ -72,46 +77,9 @@ button:hover { background-color: #45a049; }
 
 <h2>CGPA Calculator</h2>
 
-<div>
-    Subject Name:
-    <input type="text" id="subject" placeholder="e.g. Math">
-
-    Credit:
-    <input type="number" id="credit" min="1" placeholder="Credits">
-
-    Marks:
-    <input type="number" id="marks" min="0" max="100" placeholder="0-100">
-
-    <button onclick="addSubject()">Add Subject</button>
-</div>
-
-<!-- ✅ SUBJECT TABLE -->
-<table class="subject-table">
-    <thead>
-        <tr>
-            <th>Subject</th>
-            <th>Credits</th>
-            <th>Marks</th>
-            <th>Grade</th>
-            <th>Grade Point</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="subjectList">
-        <!-- rows inserted by JS -->
-    </tbody>
-</table>
-
-<br>
-
-<button onclick="calculateCGPA()">Calculate CGPA & Statistics</button>
-<button onclick="clearAll()">Clear All</button>
-
-<h3>Result</h3>
-<p id="result"></p>
-
-<div id="stats"></div>
-
-<script src="script.js"></script>
-</body>
-</html>
+<!-- LAST SEMESTER CGPA -->
+<div style="margin-top:15px;">
+    <label>Last Semester CGPA</label><br>
+    <input type="number" id="lastCGPA"
+           step="0.01" min="0" max="4"
+           placeholder="e.g. 3

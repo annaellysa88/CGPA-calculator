@@ -1,5 +1,8 @@
 let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
+let currentCGPA = null;
+let finalCGPA = null;
+
 function getGradePoint(marks) {
     if (marks >= 80) return 4.00;
     else if (marks >= 75) return 3.67;
@@ -85,11 +88,6 @@ function deleteSubject(index) {
 }
 
 function calculateCGPA() {
-    if (subjects.length === 0) {
-        document.getElementById("result").innerText = "";
-        return;
-    }
-
     let totalPoints = 0;
     let totalCredits = 0;
 
@@ -98,10 +96,30 @@ function calculateCGPA() {
         totalCredits += sub.credit;
     });
 
-    const cgpa = totalPoints / totalCredits;
+    if (totalCredits === 0) return null;
 
-    document.getElementById("result").innerText =
-        `Your CGPA is: ${cgpa.toFixed(2)}`;
+    return totalPoints / totalCredits;
+}
+
+function finishCalculation() {
+    if (subjects.length === 0) {
+        alert("Please enter at least one subject.");
+        return;
+    }
+
+    const lastCGPA = Number(document.getElementById("lastCGPA").value);
+
+    if (lastCGPA <= 0 || lastCGPA > 4) {
+        alert("Please enter a valid last semester CGPA.");
+        return;
+    }
+
+    currentCGPA = calculateCGPA();
+    finalCGPA = ((lastCGPA + currentCGPA) / 2).toFixed(2);
+
+    displayFinalResult(lastCGPA, currentCGPA, finalCGPA);
+    displayStatistics();
+    drawComparisonGraph(lastCGPA, currentCGPA);
 }
 
 function clearAll() {
@@ -112,6 +130,53 @@ function clearAll() {
         document.getElementById("result").innerText = "";
     }
 }
+
+function displayFinalResult(last, current, finalCGPA) {
+    document.getElementById("result").innerHTML = `
+        <strong>Last Semester CGPA:</strong> ${last.toFixed(2)} <br>
+        <strong>Current Semester CGPA:</strong> ${current.toFixed(2)} <br>
+        <strong>Final CGPA:</strong> ${finalCGPA}
+    `;
+}
+function displayStatistics() {
+    const marks = subjects.map(s => s.marks);
+    const highest = Math.max(...marks);
+    const lowest = Math.min(...marks);
+
+    document.getElementById("stats").innerHTML = `
+        <table class="stats-table">
+            <tr>
+                <th>Highest Marks</th>
+                <th>Lowest Marks</th>
+            </tr>
+            <tr>
+                <td>${highest}</td>
+                <td>${lowest}</td>
+            </tr>
+        </table>
+    `;
+}
+function drawComparisonGraph(last, current) {
+    const canvas = document.getElementById("cgpaChart");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const barWidth = 80;
+    const maxCGPA = 4;
+    const scale = 150 / maxCGPA;
+
+    // Last semester
+    ctx.fillStyle = "#2196F3";
+    ctx.fillRect(80, 180 - last * scale, barWidth, last * scale);
+    ctx.fillText("Last", 100, 195);
+
+    // Current semester
+    ctx.fillStyle = "#4CAF50";
+    ctx.fillRect(220, 180 - current * scale, barWidth, current * scale);
+    ctx.fillText("Current", 230, 195);
+}
+
 
 // Load table on page refresh
 displaySubjects();
