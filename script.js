@@ -2,7 +2,7 @@ let subjects = [];
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
-    else if (m >= 75) return 3.67;
+    else if (m >= 74) return 3.67;
     else if (m >= 70) return 3.33;
     else if (m >= 65) return 3.00;
     else if (m >= 60) return 2.67; 
