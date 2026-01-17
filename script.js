@@ -42,7 +42,7 @@ function addSubject() {
         marks,
         gp: gradePoint(marks)
     });
-    localStorage.setItem("subjects", JSON.stringify(subjects));
+    
 
     displaySubjects();
 
