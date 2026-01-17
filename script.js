@@ -1,5 +1,4 @@
-let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
-
+let subjects = [];
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
@@ -101,7 +100,6 @@ function finishCalculation() {
     drawGraph(lastCGPA, semesterGPA);
 
    
-    
 }
 
 function showStats(credits, marks) {
@@ -145,14 +143,6 @@ function drawGraph(last, current) {
     ctx.fillText("Current", 225, 235);
 }
 
-function clearInputsAfterFinish() {
-    subjects = [];
-    document.getElementById("subjectList").innerHTML = "";
-    document.getElementById("subject").value = "";
-    document.getElementById("credit").value = "";
-    document.getElementById("marks").value = "";
-    document.getElementById("lastCGPA").value = "";
-}
 
 function clearAll() {
     subjects = [];
