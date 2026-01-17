@@ -1,4 +1,4 @@
-let subjects =  [];
+let subjects = JSON.parse(localStorage.getItem("subjects")) ||  [];
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
