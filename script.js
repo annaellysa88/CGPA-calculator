@@ -1,4 +1,4 @@
-let subjects = [];
+let subjects =  JSON.parse(localStorage.getItem("subjects")) || [];
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
@@ -42,7 +42,6 @@ function addSubject() {
         marks,
         gp: gradePoint(marks)
     });
-    
 
     displaySubjects();
 
@@ -71,7 +70,6 @@ function displaySubjects() {
 
 function deleteSubject(i) {
     subjects.splice(i, 1);
-     localStorage.setItem("subjects", JSON.stringify(subjects));
     displaySubjects();
 }
 
@@ -165,5 +163,4 @@ function clearAll() {
     document.getElementById("cgpaChart")
         .getContext("2d")
         .clearRect(0, 0, 400, 250);
-         localStorage.removeItem("subjects");
 }
