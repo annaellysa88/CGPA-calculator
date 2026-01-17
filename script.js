@@ -1,5 +1,6 @@
 let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
+
 function gradePoint(m) {
     if (m >= 80) return 4.0;
     if (m >= 70) return 3.0;
@@ -22,7 +23,7 @@ function addSubject() {
     const marks = Number(document.getElementById("marks").value);
 
     if (!name || credit <= 0 || marks < 0 || marks > 100) {
-        alert("Please enter valid subject details");
+        alert("Invalid subject input");
         return;
     }
 
@@ -33,10 +34,9 @@ function addSubject() {
         gp: gradePoint(marks)
     });
 
-    localStorage.setItem("subjects", JSON.stringify(subjects));
     displaySubjects();
 
-    // Clear ONLY subject inputs
+    // ✅ Clear subject inputs after adding
     document.getElementById("subject").value = "";
     document.getElementById("credit").value = "";
     document.getElementById("marks").value = "";
@@ -61,7 +61,6 @@ function displaySubjects() {
 
 function deleteSubject(i) {
     subjects.splice(i, 1);
-    localStorage.setItem("subjects", JSON.stringify(subjects));
     displaySubjects();
 }
 
@@ -81,22 +80,28 @@ function finishCalculation() {
         marksArr.push(s.marks);
     });
 
+    // ✅ Semester GPA
     const semesterGPA = totalPoints / totalCredits;
+
+    // ✅ Last CGPA
     const lastCGPA = Number(document.getElementById("lastCGPA").value) || 0;
+
+    // ✅ New CGPA (simple average)
     const newCGPA = lastCGPA > 0
         ? (semesterGPA + lastCGPA) / 2
         : semesterGPA;
 
+    // ✅ Display results step-by-step
     document.getElementById("result").innerHTML = `
-        <strong>Semester GPA:</strong> ${semesterGPA.toFixed(2)}<br>
+        <strong>Semester GPA:</strong> ${semesterGPA.toFixed(2)} <br>
         <strong>New CGPA:</strong> ${newCGPA.toFixed(2)}
     `;
 
     showStats(totalCredits, marksArr);
     drawGraph(lastCGPA, semesterGPA);
 
-    // Clear ONLY last CGPA input
-    document.getElementById("lastCGPA").value = "";
+   
+    
 }
 
 function showStats(credits, marks) {
@@ -129,31 +134,33 @@ function drawGraph(last, current) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillText("CGPA Comparison", 150, 20);
+    ctx.fillText("CGPA Comparison", 140, 20);
 
     ctx.fillStyle = "#2196F3";
-    ctx.fillRect(120, 230 - last * 40, 50, last * 40);
-    ctx.fillText("Last", 130, 245);
+    ctx.fillRect(120, 220 - last * 40, 50, last * 40);
+    ctx.fillText("Last", 130, 235);
 
     ctx.fillStyle = "#4CAF50";
-    ctx.fillRect(240, 230 - current * 40, 50, current * 40);
-    ctx.fillText("Current", 230, 245);
+    ctx.fillRect(230, 220 - current * 40, 50, current * 40);
+    ctx.fillText("Current", 225, 235);
+}
+
+function clearInputsAfterFinish() {
+    subjects = [];
+    document.getElementById("subjectList").innerHTML = "";
+    document.getElementById("subject").value = "";
+    document.getElementById("credit").value = "";
+    document.getElementById("marks").value = "";
+    document.getElementById("lastCGPA").value = "";
 }
 
 function clearAll() {
-    if (!confirm("Clear all data?")) return;
-
     subjects = [];
-    localStorage.removeItem("subjects");
-
     document.getElementById("subjectList").innerHTML = "";
     document.getElementById("stats").innerHTML = "";
     document.getElementById("result").innerText = "";
-
+    document.getElementById("lastCGPA").value = "";
     document.getElementById("cgpaChart")
         .getContext("2d")
-        .clearRect(0, 0, 420, 260);
+        .clearRect(0, 0, 400, 250);
 }
-
-// Load saved data on page load
-displaySubjects();
