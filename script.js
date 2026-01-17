@@ -163,4 +163,4 @@ function clearAll() {
     document.getElementById("cgpaChart")
         .getContext("2d")
         .clearRect(0, 0, 400, 250);
-}
+} 
