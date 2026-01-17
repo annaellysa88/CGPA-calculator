@@ -1,19 +1,29 @@
-let subjects = [];
+let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
-    if (m >= 70) return 3.0;
-    if (m >= 60) return 2.0;
-    if (m >= 50) return 1.0;
-    return 0.0;
+    else if (m >= 75) return 3.67;
+    else if (m >= 70) return 3.33;
+    else if (m >= 65) return 3.00;
+    else if (m >= 60) return 2.67; 
+    else if (m >= 55) return 2.33; 
+    else if (m >= 50) return 2.00; 
+    else if (m >= 45) return 1.67; 
+    else if (m >= 40) return 1.00;
+    else return 0.00;
 }
 
 function gradeLetter(m) {
     if (m >= 80) return "A";
-    if (m >= 70) return "B";
-    if (m >= 60) return "C";
-    if (m >= 50) return "D";
-    return "F";
+    else if (m >= 75) return "A-"; 
+    else if (m >= 70) return "B+"; 
+    else if (m >= 65) return "B"; 
+    else if (m >= 60) return "B-"; 
+    else if (m >= 55) return "C+"; 
+    else if (m >= 50) return "C"; 
+    else if (m >= 45) return "D+"; 
+    else if (m >= 40) return "D"; 
+    else return "F";
 }
 
 function addSubject() {
