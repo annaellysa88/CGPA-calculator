@@ -1,28 +1,31 @@
-let subjects = [];
+// ✅ Load from localStorage
+let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
+document.getElementById("lastCGPA").value =
+    localStorage.getItem("lastCGPA") || "";
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
     else if (m >= 74) return 3.67;
     else if (m >= 70) return 3.33;
     else if (m >= 65) return 3.00;
-    else if (m >= 60) return 2.67; 
-    else if (m >= 55) return 2.33; 
-    else if (m >= 50) return 2.00; 
-    else if (m >= 45) return 1.67; 
+    else if (m >= 60) return 2.67;
+    else if (m >= 55) return 2.33;
+    else if (m >= 50) return 2.00;
+    else if (m >= 45) return 1.67;
     else if (m >= 40) return 1.00;
     else return 0.00;
 }
 
 function gradeLetter(m) {
     if (m >= 80) return "A";
-    else if (m >= 75) return "A-"; 
-    else if (m >= 70) return "B+"; 
-    else if (m >= 65) return "B"; 
-    else if (m >= 60) return "B-"; 
-    else if (m >= 55) return "C+"; 
-    else if (m >= 50) return "C"; 
-    else if (m >= 45) return "D+"; 
-    else if (m >= 40) return "D"; 
+    else if (m >= 75) return "A-";
+    else if (m >= 70) return "B+";
+    else if (m >= 65) return "B";
+    else if (m >= 60) return "B-";
+    else if (m >= 55) return "C+";
+    else if (m >= 50) return "C";
+    else if (m >= 45) return "D+";
+    else if (m >= 40) return "D";
     else return "F";
 }
 
@@ -43,9 +46,12 @@ function addSubject() {
         gp: gradePoint(marks)
     });
 
+    // ✅ Save subjects
+    localStorage.setItem("subjects", JSON.stringify(subjects));
+
     displaySubjects();
 
-    // ✅ Clear subject inputs after adding
+    // Clear inputs only
     document.getElementById("subject").value = "";
     document.getElementById("credit").value = "";
     document.getElementById("marks").value = "";
@@ -70,6 +76,7 @@ function displaySubjects() {
 
 function deleteSubject(i) {
     subjects.splice(i, 1);
+    localStorage.setItem("subjects", JSON.stringify(subjects));
     displaySubjects();
 }
 
@@ -89,27 +96,28 @@ function finishCalculation() {
         marksArr.push(s.marks);
     });
 
-    // ✅ Semester GPA
     const semesterGPA = totalPoints / totalCredits;
 
-    // ✅ Last CGPA
     const lastCGPA = Number(document.getElementById("lastCGPA").value) || 0;
+    localStorage.setItem("lastCGPA", lastCGPA);
 
-    // ✅ New CGPA (simple average)
     const newCGPA = lastCGPA > 0
         ? (semesterGPA + lastCGPA) / 2
         : semesterGPA;
 
-    // ✅ Display results step-by-step
     document.getElementById("result").innerHTML = `
         <strong>Semester GPA:</strong> ${semesterGPA.toFixed(2)} <br>
         <strong>New CGPA:</strong> ${newCGPA.toFixed(2)}
     `;
 
+    // ✅ Save results
+    localStorage.setItem("results", JSON.stringify({
+        semesterGPA,
+        newCGPA
+    }));
+
     showStats(totalCredits, marksArr);
     drawGraph(lastCGPA, semesterGPA);
-
-   
 }
 
 function showStats(credits, marks) {
@@ -153,14 +161,21 @@ function drawGraph(last, current) {
     ctx.fillText("Current", 225, 235);
 }
 
-
 function clearAll() {
+    if (!confirm("Clear all saved data?")) return;
+
     subjects = [];
+    localStorage.clear();
+
     document.getElementById("subjectList").innerHTML = "";
     document.getElementById("stats").innerHTML = "";
     document.getElementById("result").innerText = "";
     document.getElementById("lastCGPA").value = "";
+
     document.getElementById("cgpaChart")
         .getContext("2d")
         .clearRect(0, 0, 400, 250);
-} 
+}
+
+// ✅ Display saved subjects on load
+displaySubjects();
