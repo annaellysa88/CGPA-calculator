@@ -5,13 +5,14 @@ document.getElementById("lastCGPA").value =
 
 function gradePoint(m) {
     if (m >= 80) return 4.0;
-    else if (m >= 74) return 3.67;
-    else if (m >= 70) return 3.33;
+    else if (m >= 75) return 3.70;
+    else if (m >= 70) return 3.30;
     else if (m >= 65) return 3.00;
-    else if (m >= 60) return 2.67;
-    else if (m >= 55) return 2.33;
+    else if (m >= 60) return 2.70;
+    else if (m >= 55) return 2.30;
     else if (m >= 50) return 2.00;
-    else if (m >= 45) return 1.67;
+    else if (m >= 47) return 1.70;
+    else if (m >= 44) return 1.30;
     else if (m >= 40) return 1.00;
     else return 0.00;
 }
@@ -24,7 +25,8 @@ function gradeLetter(m) {
     else if (m >= 60) return "B-";
     else if (m >= 55) return "C+";
     else if (m >= 50) return "C";
-    else if (m >= 45) return "D+";
+    else if (m >= 47) return "C-";
+    else if (m >= 44) return "D+";
     else if (m >= 40) return "D";
     else return "F";
 }
